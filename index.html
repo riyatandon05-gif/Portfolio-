@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riya Tandon — Frontend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF7F0;
+    --paper-dark:#1B2029;
+    --ink:#14181F;
+    --ink-soft:#5A6270;
+    --amber:#E2912B;
+    --teal:#2F6F62;
+    --line:#DDD6C7;
+    --line-dark:#343B47;
+    --radius:10px;
+    --max:1080px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+
+  ::selection{background:var(--amber); color:var(--ink);}
+
+  /* ---------- layout shell ---------- */
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px;}
+  section{position:relative; padding:96px 0;}
+  @media (max-width:640px){ section{padding:64px 0;} }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:18px; height:1px; background:var(--amber);
+    display:inline-block;
+  }
+  .eyebrow.on-dark{color:var(--amber);}
+
+  .node{
+    width:9px; height:9px; border-radius:50%;
+    border:1.5px solid var(--amber);
+    background:var(--paper);
+    flex-shrink:0;
+  }
+  .on-dark .node{background:var(--paper-dark);}
+
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(250,247,240,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--max); margin:0 auto; padding:14px 28px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; row-gap:8px;
+  }
+  .nav-mark{font-family:'Space Grotesk'; font-weight:700; font-size:18px; white-space:nowrap;}
+  .nav-mark span{color:var(--amber);}
+  .nav-links{display:flex; gap:22px; font-family:'JetBrains Mono'; font-size:12.5px; text-transform:uppercase; letter-spacing:0.06em;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); transition:color .2s; white-space:nowrap;}
+  .nav-links a:hover{color:var(--amber);}
+  @media (max-width:640px){
+    .nav-inner{padding:12px 20px;}
+    .nav-mark{font-size:15px;}
+    .nav-links{gap:12px; font-size:10px; width:100%; justify-content:flex-start;}
+  }
+
+  .hero{padding-top:160px; padding-bottom:80px;}
+  .hero-grid{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:48px; align-items:center;
+  }
+  @media (max-width:840px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .hero h1{
+    font-size:clamp(2.4rem, 5.5vw, 4rem);
+    line-height:1.04;
+    font-weight:700;
+  }
+  .hero h1 .accent{color:var(--amber);}
+  .hero p.lede{
+    margin-top:22px; max-width:46ch;
+    font-size:1.08rem; color:var(--ink-soft);
+  }
+  .hero-meta{
+    margin-top:26px; display:flex; gap:18px; flex-wrap:wrap;
+    font-family:'JetBrains Mono'; font-size:13px; color:var(--ink-soft);
+  }
+  .hero-meta span{display:flex; align-items:center; gap:7px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+  .cta-row{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono'; font-size:13px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:13px 22px; border-radius:6px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(20,24,31,0.18);}
+  .btn-ghost{border:1px solid var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--amber); color:var(--amber); transform:translateY(-2px);}
+
+  .diagram-box{
+    background:var(--ink); border-radius:14px; padding:28px;
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+  }
+  .diagram-box svg{width:100%; height:100%;}
+  .flow-path{
+    fill:none; stroke:var(--amber); stroke-width:1.6;
+    stroke-dasharray:600; stroke-dashoffset:600;
+    animation:draw 2.4s ease forwards .3s;
+  }
+  .flow-path.teal{stroke:var(--teal);}
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  .diagram-box circle.node-dot{fill:var(--paper);}
+  .diagram-box text{
+    font-family:'JetBrains Mono', monospace; font-size:9px; fill:#9AA2B0;
+    letter-spacing:0.04em;
+  }
+
+  .flowline{
+    position:absolute; left:0; top:0; bottom:0; width:1px;
+    background:var(--line);
+  }
+  .flowline.dark{background:var(--line-dark);}
+  @media (max-width:840px){ .flowline{display:none;} }
+
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px;}
+  @media (max-width:780px){ .about-grid{grid-template-columns:1fr; gap:36px;} }
+  .about-text p{color:var(--ink-soft); font-size:1.02rem; max-width:52ch;}
+  .about-text p + p{margin-top:14px;}
+
+  .skill-group + .skill-group{margin-top:22px;}
+  .skill-group h3{
+    font-family:'JetBrains Mono'; font-size:11.5px; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--teal); margin-bottom:10px; font-weight:500;
+  }
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family:'JetBrains Mono'; font-size:12.5px;
+    border:1px solid var(--line); border-radius:5px;
+    padding:6px 11px; color:var(--ink); background:#fff;
+  }
+
+  .proc-card{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:#fff; padding:30px; margin-bottom:22px;
+    transition:border-color .2s, transform .2s;
+  }
+  .proc-card:hover{border-color:var(--amber); transform:translateY(-3px);}
+  .proc-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:18px; flex-wrap:wrap; margin-bottom:14px;
+  }
+  .proc-tag{font-family:'JetBrains Mono'; font-size:11px; color:var(--amber); letter-spacing:0.06em;}
+  .proc-card h3{font-size:1.4rem; margin-top:4px;}
+  .proc-card p.desc{color:var(--ink-soft); margin:14px 0 18px; max-width:64ch;}
+  .io-row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media (max-width:560px){ .io-row{grid-template-columns:1fr;} }
+  .io-block h4{
+    font-family:'JetBrains Mono'; font-size:10.5px; text-transform:uppercase;
+    color:var(--ink-soft); letter-spacing:0.08em; margin-bottom:8px;
+  }
+  .io-block ul{list-style:none;}
+  .io-block li{
+    font-size:13.5px; padding:5px 0 5px 16px; position:relative; color:var(--ink);
+  }
+  .io-block li::before{
+    content:''; position:absolute; left:0; top:13px; width:7px; height:1px; background:var(--ink-soft);
+  }
+  .io-block.output li::before{background:var(--teal);}
+
+  .tl-item{
+    display:grid; grid-template-columns:170px 1fr; gap:24px;
+    padding:22px 0; border-bottom:1px solid var(--line-dark);
+  }
+  .tl-item:last-child{border-bottom:none;}
+  @media (max-width:560px){ .tl-item{grid-template-columns:1fr; gap:6px;} }
+  .tl-date{font-family:'JetBrains Mono'; font-size:12px; color:#9AA2B0;}
+  .tl-body h3{font-size:1.1rem; color:var(--paper);}
+  .tl-body .org{font-family:'JetBrains Mono'; font-size:12px; color:var(--amber); margin-top:3px;}
+  .tl-body ul{margin-top:10px; padding-left:18px; color:#B7BDC8; font-size:14px;}
+  .tl-body ul li{margin-bottom:4px;}
+
+  .ach-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:640px){ .ach-grid{grid-template-columns:1fr;} }
+  .ach-card{border:1px solid var(--line); border-radius:var(--radius); padding:24px; background:#fff;}
+  .ach-card h3{font-size:1.05rem; margin-bottom:8px;}
+  .ach-card p{color:var(--ink-soft); font-size:14px;}
+
+  .contact-wrap{
+    background:var(--ink); border-radius:16px; padding:56px 44px;
+    display:flex; justify-content:space-between; align-items:center; gap:30px; flex-wrap:wrap;
+  }
+  .contact-wrap h2{color:var(--paper); font-size:clamp(1.7rem,4vw,2.4rem);}
+  .contact-wrap p{color:#9AA2B0; margin-top:10px; max-width:40ch;}
+  .contact-links{display:flex; flex-direction:column; gap:10px; align-items:flex-start;}
+  .contact-links a{
+    font-family:'JetBrains Mono'; font-size:13.5px; color:var(--paper);
+    text-decoration:none; border-bottom:1px solid transparent; padding-bottom:2px;
+  }
+  .contact-links a:hover{border-bottom-color:var(--amber); color:var(--amber);}
+
+  footer{padding:32px 0; text-align:center;}
+  footer p{font-family:'JetBrains Mono'; font-size:12px; color:var(--ink-soft);}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    .flow-path{animation:none; stroke-dashoffset:0;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-mark">RIYA TANDON</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#path">Path</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Frontend Developer · UI/UX</div>
+        <h1>Interfaces that turn <span class="accent">raw process</span> into clear product.</h1>
+        <p class="lede">I design and build accessible, data-driven interfaces — from SME dashboards to rural-facing accessibility tools — using React.js, modern CSS, and a habit of mapping every flow before I code it.</p>
+        <div class="hero-meta">
+          <span><span class="dot"></span>From Lucknow, India</span>
+          <span><span class="dot"></span>BCA — Data Analytics, Uttaranchal University, Dehradun</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#work">View Projects</a>
+          <a class="btn btn-ghost" href="mailto:riyatandon2005@gmail.com">Say Hello</a>
+        </div>
+      </div>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 240 240">
+          <circle cx="40" cy="40" r="5" class="node-dot" stroke="#E2912B" stroke-width="1.4"/>
+          <circle cx="200" cy="60" r="5" class="node-dot" stroke="#2F6F62" stroke-width="1.4"/>
+          <circle cx="50" cy="190" r="5" class="node-dot" stroke="#2F6F62" stroke-width="1.4"/>
+          <circle cx="190" cy="180" r="5" class="node-dot" stroke="#E2912B" stroke-width="1.4"/>
+          <circle cx="120" cy="120" r="7" class="node-dot" stroke="#E2912B" stroke-width="1.6"/>
+
+          <path class="flow-path" d="M40,40 L120,120" />
+          <path class="flow-path teal" d="M200,60 L120,120" />
+          <path class="flow-path teal" d="M50,190 L120,120" />
+          <path class="flow-path" d="M190,180 L120,120" />
+
+          <text x="14" y="32">INPUT</text>
+          <text x="172" y="52">DATA</text>
+          <text x="14" y="184">USER</text>
+          <text x="160" y="176">VIEW</text>
+          <text x="98" y="105">UI</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="flowline"></div>
+  <div class="wrap">
+    <div class="eyebrow">About</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a BCA student specialising in Data Analytics with a focus on frontend development — I like the part of a product where a messy process becomes a clean, navigable screen.</p>
+        <p>Most of my work starts with a data flow diagram before a single component gets written: understanding how information actually moves through a system shapes how I structure state, layout, and interaction. I care about semantic HTML and WCAG accessibility as a default, not an afterthought.</p>
+      </div>
+      <div class="reveal">
+        <div class="skill-group">
+          <h3>Core Frontend</h3>
+          <div class="chip-row">
+            <span class="chip">HTML5</span><span class="chip">CSS3</span>
+            <span class="chip">JavaScript (ES6+)</span><span class="chip">React.js</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>UI / UX & Design</h3>
+          <div class="chip-row">
+            <span class="chip">Responsive Design</span><span class="chip">UI State Management</span>
+            <span class="chip">Flexbox / Grid</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Architecture & Standards</h3>
+          <div class="chip-row">
+            <span class="chip">Semantic HTML</span><span class="chip">WCAG Accessibility</span>
+            <span class="chip">System Layout Design</span><span class="chip">Data Flow Diagrams</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Tools & Platforms</h3>
+          <div class="chip-row">
+            <span class="chip">Git</span><span class="chip">GitHub</span>
+            <span class="chip">VS Code</span><span class="chip">Multimedia Editing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="flowline"></div>
+  <div class="wrap">
+    <div class="eyebrow">Selected Work</div>
+
+    <div class="proc-card reveal">
+      <div class="proc-head">
+        <div>
+          <div class="proc-tag">PROC_01 — Business Intelligence Frontend</div>
+          <h3>Vyapaar AI</h3>
+        </div>
+      </div>
+      <p class="desc">A responsive business intelligence dashboard for small-to-medium enterprises, built with React.js. Separates day-to-day operational data from long-term analytical insight across clean, navigable views, with client-side state managed for fluid interaction.</p>
+      <div class="io-row">
+        <div class="io-block">
+          <h4>Input</h4>
+          <ul><li>React.js</li><li>Client-side state management</li><li>Dashboard UX patterns</li></ul>
+        </div>
+        <div class="io-block output">
+          <h4>Output</h4>
+          <ul><li>Unified operational + analytical dashboard</li><li>Fluid, distraction-free navigation</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="proc-card reveal">
+      <div class="proc-head">
+        <div>
+          <div class="proc-tag">PROC_02 — Smart Agriculture Assistant</div>
+          <h3>AgrowSmart</h3>
+        </div>
+      </div>
+      <p class="desc">An interface built for rural end-users, starting with Level-1 data flow diagrams to plan every sub-process before any markup was written. The frontend prioritises strict semantic HTML and WCAG accessibility to keep the experience simple under real-world constraints.</p>
+      <div class="io-row">
+        <div class="io-block">
+          <h4>Input</h4>
+          <ul><li>HTML</li><li>Level-1 DFD planning</li><li>Accessibility requirements</li></ul>
+        </div>
+        <div class="io-block output">
+          <h4>Output</h4>
+          <ul><li>Accessible, low-friction UI for rural users</li><li>Mapped data flow for farming workflows</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="proc-card reveal">
+      <div class="proc-head">
+        <div>
+          <div class="proc-tag">PROC_03 — Multi-Dashboard Booking Platform</div>
+          <h3>Artist Management System</h3>
+        </div>
+      </div>
+      <p class="desc">A dynamic multi-dashboard application managing User and Artist profiles through role-based views. A client-side filtering engine sorts artist categories instantly, with interactive profile forms, pricing tables, and a 5-star rating component handling booking and feedback.</p>
+      <div class="io-row">
+        <div class="io-block">
+          <h4>Input</h4>
+          <ul><li>JavaScript</li><li>Role-based view logic</li><li>Client-side filtering engine</li></ul>
+        </div>
+        <div class="io-block output">
+          <h4>Output</h4>
+          <ul><li>Real-time booking & feedback system</li><li>Instant category sorting, no reloads</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="path" style="background:var(--ink); color:var(--paper);">
+  <div class="flowline dark"></div>
+  <div class="wrap">
+    <div class="eyebrow on-dark">Education & Experience</div>
+
+    <div class="tl-item reveal">
+      <div class="tl-date">2024 — 2027</div>
+      <div class="tl-body">
+        <h3>Bachelor of Computer Applications — Data Analytics</h3>
+        <div class="org">Uttaranchal University, Dehradun</div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-date">2024 — Present</div>
+      <div class="tl-body">
+        <h3>Active Member & Technical Contributor — Codex Club</h3>
+        <div class="org">Uttaranchal University</div>
+        <ul>
+          <li>Collaborated to organise technical events, web development bootcamps, and recruitment drives</li>
+          <li>Designed digital headers and layout assets for the club's recruitment campaign, on-brand with university guidelines</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-date">2021 — 2024</div>
+      <div class="tl-body">
+        <h3>Senior Secondary Education (XII)</h3>
+        <div class="org">Red Rose Senior Secondary School, Lucknow</div>
+        <ul>
+          <li>Coordinated school-wide events and served as liaison between the student body and administration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="flowline"></div>
+  <div class="wrap">
+    <div class="eyebrow">Achievements</div>
+    <div class="ach-grid">
+      <div class="ach-card reveal">
+        <h3>Smart India Hackathon (SIH)</h3>
+        <p>Contributed as a frontend team member, designing UI layouts under tight hackathon deadlines.</p>
+      </div>
+      <div class="ach-card reveal">
+        <h3>Line Follower Robotics Event</h3>
+        <p>Competed in the USCS robotics challenge, demonstrating logical thinking and algorithm setup.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-wrap">
+      <div>
+        <h2>Let's build something clear.</h2>
+        <p>Open to frontend & UI/UX opportunities. Based in Lucknow — happy to talk over email or call.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:riyatandon2005@gmail.com">riyatandon2005@gmail.com</a>
+        <a href="tel:+917307559214">+91 73075 59214</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="#" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & built by Riya Tandon — Lucknow, India</p>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.15});
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
